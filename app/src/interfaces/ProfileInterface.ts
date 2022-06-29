@@ -3,7 +3,7 @@ import Role from "./Role";
 interface ProfileInterface {
     id: string | number;
     user: {
-        id: 1,
+        id: string | number,
         name: string,
         email: string,
         role_id: string | number,

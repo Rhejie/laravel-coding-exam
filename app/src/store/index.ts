@@ -4,7 +4,7 @@ import UserProfile from '../interfaces/UserProfile'
 export default createStore({
   state: {
     isLoggedIn: false,
-    apiURL: 'http://127.0.0.1:8000/api',
+    apiURL: 'http://app-api.test/api',
     profile: {} as UserProfile 
   },
   getters: {

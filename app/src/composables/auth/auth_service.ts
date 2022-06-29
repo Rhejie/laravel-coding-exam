@@ -2,7 +2,8 @@ import LoginInterface from '@/interfaces/LoginInterface';
 import ProfileInterface from '@/interfaces/ProfileInterface'
 import {http} from '../http_service'
 import store from '../../store';
-import UserProfile from '@/interfaces/UserProfile';
+import UserProfile from '@/interfaces/UserProfile'; 
+// import jwt from 'jsonwebtoken';
 
 export const login = async (data: LoginInterface) : Promise<ProfileInterface> => {
     const res = await http().post('/auth/login', data).then((res) : Promise<ProfileInterface> => {
@@ -26,6 +27,7 @@ export const getProfile = async () : Promise<UserProfile> => {
 }
 
 function setToken(data: ProfileInterface) {
+    // console.log(jwt.sign({data}, 'shhh'))
     const token = JSON.stringify(data);
     localStorage.setItem('test', token);
     store.dispatch('authenticate', data.user);

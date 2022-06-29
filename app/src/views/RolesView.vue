@@ -3,7 +3,7 @@
         <header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 class="text-3xl font-bold leading-tight text-gray-900">Roles</h1>
-                <el-button type="primary" @click="handleCLickCreateRole" round>Create Role</el-button>
+                <el-button type="primary" @click="handleCLickCreateRole" v-if="profile.role.name.toLowerCase() === 'admin'" round>Create Role</el-button>
             </div>
         </header>
         <main>
@@ -16,8 +16,8 @@
                             <el-table-column prop="description" label="Description" />
                             <el-table-column fixed="right" label="Actions">
                                 <template #default="scope">
-                                    <el-button type="success" v-if="scope.row.name.toLowerCase() === 'admin' ? false : true" @click="handleClickEdit(scope.row)" size="small">Edit</el-button>
-                                    <el-button type="danger" size="small" v-if="profile.role.name.toLowerCase() == 'admin'" @click="handleClickDelete(scope.row.id, scope.$index)">Delete</el-button>
+                                    <el-button type="success" v-if="editable(scope.row)" @click="handleClickEdit(scope.row)" size="small">Edit</el-button>
+                                    <el-button type="danger" size="small" v-if="profile.role.name.toLowerCase() == 'admin' && scope.row.name.toLowerCase() != 'admin'" @click="handleClickDelete(scope.row.id, scope.$index)">Delete</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -36,6 +36,7 @@ import useEmitter from '@/composables/useEmitter';
 import { getRoles, deleteRole } from '@/composables/role/role_services';
 import { ElNotification } from 'element-plus';
 import { useProfile } from '@/composables/user/useProfile';
+import Role from '@/interfaces/Role';
 
 export default defineComponent({
     name: 'RolesView',
@@ -77,6 +78,15 @@ export default defineComponent({
             })
         }
 
+        const editable = (data: Role) : boolean => {
+            if(profile.role.name.toLowerCase() == 'admin') {
+                return data.name.toLowerCase() === 'admin' ? false : true
+            }
+            else {
+                return false
+            }
+        }
+
         onMounted(() => {
             getData()
 
@@ -91,7 +101,8 @@ export default defineComponent({
             handleCLickCreateRole,
             handleClickEdit,
             handleClickDelete,
-            profile
+            profile,
+            editable
         }
     }
 })
